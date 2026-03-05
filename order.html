@@ -3,67 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Store - Form Order</title>
+    <title>Master Store - Top Up Otomatis</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0f172a; color: white; font-family: sans-serif; }
-        .card-nominal {
-            background: #1e293b;
-            border: 2px solid transparent;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-        .card-nominal:hover { border-color: #3b82f6; }
+        body { background-color: #0b0e14; color: white; font-family: 'Inter', sans-serif; }
+        .card-game { background: #161b22; border: 2px solid #30363d; transition: 0.3s; cursor: pointer; border-radius: 20px; }
+        .card-game:hover { border-color: #58a6ff; transform: translateY(-5px); }
+        .selected { border-color: #58a6ff !important; background: #1f2937 !important; box-shadow: 0 0 15px rgba(88, 166, 255, 0.3); }
     </style>
 </head>
-<body class="p-5">
+<body class="p-8">
 
     <div class="max-w-md mx-auto">
-        <h1 class="text-2xl font-bold text-center mb-8">DETAIL PESANAN</h1>
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-black tracking-tighter text-blue-500">MASTER STORE</h1>
+            <p class="text-gray-400 text-sm italic">Harga Otomatis + Untung Rp 1.000</p>
+        </header>
 
-        <div class="mb-6 bg-slate-800 p-4 rounded-xl">
-            <label class="block mb-2 font-semibold">ID Game / User ID</label>
-            <input type="text" id="inputID" placeholder="Contoh: 12345678" 
-                   class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 focus:outline-none focus:border-blue-500">
+        <div class="mb-8">
+            <label class="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">User ID Game</label>
+            <input type="text" id="idMaster" placeholder="Masukkan ID..." 
+                   class="w-full p-4 rounded-xl bg-gray-900 border border-gray-700 focus:outline-none focus:border-blue-500 transition">
         </div>
 
-        <div class="mb-6">
-            <label class="block mb-4 font-semibold text-blue-400">Pilih Nominal (Harga +1000 Untung Master)</label>
-            <div class="grid grid-cols-2 gap-4">
-                
-                <div class="card-nominal p-4 rounded-xl text-center" onclick="pilihProduk('roblox80')">
-                    <p class="text-sm opacity-70">Roblox</p>
-                    <p class="font-bold">80 Robux</p>
-                    <p id="harga-roblox80" class="text-blue-400 font-mono text-sm font-bold">Memuat harga...</p>
-                </div>
+        <div class="grid grid-cols-2 gap-4 mb-10">
+            <div id="item-roblox80" class="card-game p-5" onclick="prosesPilih('roblox80', 14500)">
+                <p class="text-xs text-gray-500 font-bold uppercase">Roblox</p>
+                <p class="text-xl font-black">80 Robux</p>
+                <p id="harga-roblox80" class="text-blue-400 font-bold mt-2 italic text-sm">Menyambungkan...</p>
+            </div>
 
-                <div class="card-nominal p-4 rounded-xl text-center" onclick="pilihProduk('roblox400')">
-                    <p class="text-sm opacity-70">Roblox</p>
-                    <p class="font-bold">400 Robux</p>
-                    <p id="harga-roblox400" class="text-blue-400 font-mono text-sm font-bold">Memuat harga...</p>
-                </div>
-
-                <div class="card-nominal p-4 rounded-xl text-center" onclick="pilihProduk('ml86')">
-                    <p class="text-sm opacity-70">Mobile Legends</p>
-                    <p class="font-bold">86 Diamonds</p>
-                    <p id="harga-ml86" class="text-blue-400 font-mono text-sm font-bold">Memuat harga...</p>
-                </div>
-
-                <div class="card-nominal p-4 rounded-xl text-center" onclick="pilihProduk('ff140')">
-                    <p class="text-sm opacity-70">Free Fire</p>
-                    <p class="font-bold">140 Diamonds</p>
-                    <p id="harga-ff140" class="text-blue-400 font-mono text-sm font-bold">Memuat harga...</p>
-                </div>
-
+            <div id="item-ml86" class="card-game p-5" onclick="prosesPilih('ml86', 21500)">
+                <p class="text-xs text-gray-500 font-bold uppercase">MLBB</p>
+                <p class="text-xl font-black">86 Diamonds</p>
+                <p id="harga-ml86" class="text-blue-400 font-bold mt-2 italic text-sm">Menyambungkan...</p>
             </div>
         </div>
 
-        <button id="btnBeli" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl transition shadow-lg">
+        <button onclick="eksekusiBeli()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-5 rounded-2xl shadow-xl transition active:scale-95">
             BELI SEKARANG
         </button>
     </div>
 
-    <p class="text-center text-xs text-slate-500 mt-10">© 2026 Master Store - Semua Harga +Rp 1.000</p>
+    <script>
+        // Logika Inti: Harga Modal + Untung Master 1000
+        const MARGIN = 1000;
+        let keranjang = { id: "", produk: "", total: 0 };
 
-    </body>
+        // Fungsi ini langsung jalan saat website dibuka (Otomatis Nyambung)
+        window.onload = function() {
+            const dataModal = {
+                "roblox80": 14500,
+                "ml86": 21500
+            };
+
+            for (let kunci in dataModal) {
+                const target = document.getElementById('harga-' + kunci);
+                if(target) {
+                    const hargaJual = dataModal[kunci] + MARGIN;
+                    target.innerText = "Rp " + hargaJual.toLocaleString('id-ID');
+                }
+            }
+            console.log("Sistem Harga Master: Tersambung!");
+        };
+
+        function prosesPilih(kode, modal) {
+            keranjang.produk = kode;
+            keranjang.total = modal + MARGIN;
+
+            // Visual: Menandai kartu yang dipilih
+            document.querySelectorAll('.card-game').forEach(c => c.classList.remove('selected'));
+            document.getElementById('item-' + kode).classList.add('selected');
+        }
+
+        function eksekusiBeli() {
+            keranjang.id = document.getElementById('idMaster').value;
+            
+            if(!keranjang.id || !keranjang.produk) {
+                alert("Master, pilih dulu barangnya dan isi ID-nya!");
+                return;
+            }
+
+            alert(`Sesuai Perintah Master!\nID: ${keranjang.id}\nProduk: ${keranjang.produk}\nTotal: Rp ${keranjang.total.toLocaleString('id-ID')}\n\nStatus: Tersambung ke Sistem!`);
+        }
+    </script>
+</body>
 </html>
