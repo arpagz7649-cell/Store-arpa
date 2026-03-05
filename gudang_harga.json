@@ -1,0 +1,30 @@
+{
+  "nama_toko": "MASTER STORE",
+  "keterangan": "Semua harga_jual sudah otomatis +1000 dari harga_modal",
+  "stok_game": [
+    {
+      "kode": "roblox80",
+      "nama": "80 Robux",
+      "harga_modal": 14500,
+      "harga_jual": 15500
+    },
+    {
+      "kode": "roblox400",
+      "nama": "400 Robux",
+      "harga_modal": 72000,
+      "harga_jual": 73000
+    },
+    {
+      "kode": "ml86",
+      "nama": "86 Diamonds",
+      "harga_modal": 21000,
+      "harga_jual": 22000
+    },
+    {
+      "kode": "ff140",
+      "nama": "140 Diamonds",
+      "harga_modal": 19500,
+      "harga_jual": 20500
+    }
+  ]
+}
