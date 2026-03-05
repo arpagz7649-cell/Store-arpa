@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASTER STORE Premium - Top Up Mewah</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* CSS Kustom untuk Efek Spesial */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0d0d12; /* Warna Hitam-Mati yang lebih elegan */
+        }
+
+        /* Efek Gradient Text di Judul Utama */
+        .text-gradient {
+            background: linear-gradient(135deg, #f8fafc 30%, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Efek Kartu Glassmorphism (Kaca) + Hover Gila */
+        .game-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(96, 165, 250, 0.5); /* Biru saat di-hover */
+            box-shadow: 0 10px 30px -10px rgba(96, 165, 250, 0.3);
+            background: rgba(96, 165, 250, 0.03);
+        }
+
+        /* Menambahkan Efek Kilau Tipis */
+        .game-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 100%);
+            transform: skewX(-25deg);
+            transition: 0.5s;
+        }
+
+        .game-card:hover::after {
+            left: 150%;
+        }
+
+        /* Styling Ikon agar tampak melayang */
+        .floating-icon {
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
+            transition: transform 0.3s ease;
+        }
+        .game-card:hover .floating-icon {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 15px rgba(96, 165, 250, 0.5));
+        }
+
+    </style>
+</head>
+<body class="text-white min-h-screen">
+
+    <div class="container mx-auto px-6 py-12 md:py-20 flex flex-col items-center">
+        
+        <header class="text-center mb-16 md:mb-24">
+            <h1 class="text-5xl md:text-6xl font-extrabold tracking-tighter text-gradient mb-3">MASTER STORE</h1>
+            <div class="flex items-center justify-center gap-2 bg-gray-900/50 px-4 py-2 rounded-full border border-gray-800">
+                <img src="https://img.icons8.com/color/24/000000/qr-code.png" class="w-5" alt="QRIS">
+                <p class="text-sm md:text-base text-gray-400 font-medium">Top Up Aman, Cepat & Otomatis via QRIS</p>
+            </div>
+        </header>
+
+        <main class="w-full max-w-5xl">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+                
+                <a href="#" class="game-card group relative p-6 rounded-3xl flex flex-col items-center justify-center text-center overflow-hidden h-60">
+                    <div class="absolute inset-0 bg-purple-500/10 opacity-0 group-hover:opacity-100 transition"></div>
+                    <img src="https://i.ibb.co/Xz95mPj/roblox-icon.png" alt="Roblox" class="floating-icon w-28 h-28 object-contain mb-4">
+                    <p class="text-xl font-bold tracking-tight">Roblox</p>
+                    <p class="text-xs text-purple-400 opacity-0 group-hover:opacity-100 transition mt-1">Cek Produk</p>
+                </a>
+
+                <a href="#" class="game-card group relative p-6 rounded-3xl flex flex-col items-center justify-center text-center overflow-hidden h-60">
+                    <div class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition"></div>
+                    <img src="https://i.ibb.co/3rkH9Lh/ff-icon.png" alt="Free Fire" class="floating-icon w-28 h-28 object-contain mb-4">
+                    <p class="text-xl font-bold tracking-tight">Free Fire</p>
+                    <p class="text-xs text-blue-400 opacity-0 group-hover:opacity-100 transition mt-1">Cek Produk</p>
+                </a>
+
+                <a href="#" class="game-card group relative p-6 rounded-3xl flex flex-col items-center justify-center text-center overflow-hidden h-60 col-span-2 md:col-span-1 mx-auto md:mx-0 w-3/4 md:w-full">
+                    <div class="absolute inset-0 bg-gray-500/10 opacity-0 group-hover:opacity-100 transition"></div>
+                    <img src="https://i.ibb.co/3rkH9Lh/ff-icon.png" alt="MLBB" class="floating-icon w-28 h-28 object-contain mb-4 filter grayscale group-hover:grayscale-0 transition">
+                    <p class="text-xl font-bold tracking-tight">MLBB</p>
+                    <p class="text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition mt-1">Cek Produk</p>
+                </a>
+
+            </div>
+        </main>
+
+        <footer class="mt-24 w-full text-center text-xs text-gray-600 border-t border-gray-900 pt-6">
+            <p>&copy; 2026 Master Store Inc. All Rights Reserved.</p>
+        </footer>
+
+        <img src="https://i.ibb.co/D8n4H0D/maskot.png" alt="Maskot Master" class="fixed bottom-4 right-4 w-12 h-12 md:w-16 md:h-16 opacity-70 hover:opacity-100 transition cursor-pointer">
+
+    </div>
+
+</body>
+</html>
