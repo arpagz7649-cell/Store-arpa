@@ -2,90 +2,65 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Store - Top Up Otomatis</title>
+    <title>Master Store - Koneksi Server Full</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background-color: #0b0e14; color: white; font-family: 'Inter', sans-serif; }
-        .card-game { background: #161b22; border: 2px solid #30363d; transition: 0.3s; cursor: pointer; border-radius: 20px; }
-        .card-game:hover { border-color: #58a6ff; transform: translateY(-5px); }
-        .selected { border-color: #58a6ff !important; background: #1f2937 !important; box-shadow: 0 0 15px rgba(88, 166, 255, 0.3); }
-    </style>
-</head>
-<body class="p-8">
-
-    <div class="max-w-md mx-auto">
-        <header class="text-center mb-10">
-            <h1 class="text-4xl font-black tracking-tighter text-blue-500">MASTER STORE</h1>
-            <p class="text-gray-400 text-sm italic">Harga Otomatis + Untung Rp 1.000</p>
-        </header>
-
-        <div class="mb-8">
-            <label class="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">User ID Game</label>
-            <input type="text" id="idMaster" placeholder="Masukkan ID..." 
-                   class="w-full p-4 rounded-xl bg-gray-900 border border-gray-700 focus:outline-none focus:border-blue-500 transition">
-        </div>
-
-        <div class="grid grid-cols-2 gap-4 mb-10">
-            <div id="item-roblox80" class="card-game p-5" onclick="prosesPilih('roblox80', 14500)">
-                <p class="text-xs text-gray-500 font-bold uppercase">Roblox</p>
-                <p class="text-xl font-black">80 Robux</p>
-                <p id="harga-roblox80" class="text-blue-400 font-bold mt-2 italic text-sm">Menyambungkan...</p>
-            </div>
-
-            <div id="item-ml86" class="card-game p-5" onclick="prosesPilih('ml86', 21500)">
-                <p class="text-xs text-gray-500 font-bold uppercase">MLBB</p>
-                <p class="text-xl font-black">86 Diamonds</p>
-                <p id="harga-ml86" class="text-blue-400 font-bold mt-2 italic text-sm">Menyambungkan...</p>
-            </div>
-        </div>
-
-        <button onclick="eksekusiBeli()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-5 rounded-2xl shadow-xl transition active:scale-95">
-            BELI SEKARANG
-        </button>
-    </div>
-
+    
     <script>
-        // Logika Inti: Harga Modal + Untung Master 1000
-        const MARGIN = 1000;
-        let keranjang = { id: "", produk: "", total: 0 };
+        // 1. Fungsi Utama: Menyambungkan HTML ke PHP & JSON
+        async function ambilDataGudang() {
+            try {
+                // Menyambung ke file PHP yang Master buat tadi
+                const respon = await fetch('ambil_data.php'); 
+                const gudang = await respon.json();
+                
+                // Ambil daftar stok dari JSON lewat PHP
+                const stok = gudang.stok_game;
+                const untungMaster = 1000;
 
-        // Fungsi ini langsung jalan saat website dibuka (Otomatis Nyambung)
-        window.onload = function() {
-            const dataModal = {
-                "roblox80": 14500,
-                "ml86": 21500
-            };
+                // 2. Suntikkan harga ke tombol-tombol HTML secara otomatis
+                stok.forEach(item => {
+                    const elemenHarga = document.getElementById('harga-' + item.kode);
+                    if (elemenHarga) {
+                        const hargaFinal = item.harga_modal + untungMaster;
+                        elemenHarga.innerText = "Rp " + hargaFinal.toLocaleString('id-ID');
+                    }
+                });
 
-            for (let kunci in dataModal) {
-                const target = document.getElementById('harga-' + kunci);
-                if(target) {
-                    const hargaJual = dataModal[kunci] + MARGIN;
-                    target.innerText = "Rp " + hargaJual.toLocaleString('id-ID');
-                }
+                console.log("Koneksi PHP & JSON Berhasil Disambungkan!");
+            } catch (err) {
+                console.error("Gagal nyambung ke PHP/JSON Master!", err);
             }
-            console.log("Sistem Harga Master: Tersambung!");
-        };
-
-        function prosesPilih(kode, modal) {
-            keranjang.produk = kode;
-            keranjang.total = modal + MARGIN;
-
-            // Visual: Menandai kartu yang dipilih
-            document.querySelectorAll('.card-game').forEach(c => c.classList.remove('selected'));
-            document.getElementById('item-' + kode).classList.add('selected');
         }
 
-        function eksekusiBeli() {
-            keranjang.id = document.getElementById('idMaster').value;
-            
-            if(!keranjang.id || !keranjang.produk) {
-                alert("Master, pilih dulu barangnya dan isi ID-nya!");
-                return;
-            }
-
-            alert(`Sesuai Perintah Master!\nID: ${keranjang.id}\nProduk: ${keranjang.produk}\nTotal: Rp ${keranjang.total.toLocaleString('id-ID')}\n\nStatus: Tersambung ke Sistem!`);
-        }
+        // Jalankan penyambungan otomatis saat halaman Master dibuka
+        window.onload = ambilDataGudang;
     </script>
+</head>
+
+<body class="bg-[#0b0e14] text-white p-6">
+    <div class="max-w-md mx-auto">
+        <h1 class="text-3xl font-black text-blue-500 mb-8 tracking-tighter italic">MASTER STORE</h1>
+
+        <div class="mb-6">
+            <input type="text" id="idGame" placeholder="MASUKKAN ID MASTER..." 
+                   class="w-full p-4 rounded-xl bg-gray-900 border border-gray-800 outline-none focus:border-blue-500 font-bold">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            
+            <div class="bg-gray-900 p-5 rounded-3xl border border-gray-800 hover:border-blue-500 transition">
+                <p class="text-[10px] text-gray-500 font-bold">ROBLOX</p>
+                <p class="font-black text-lg">80 Robux</p>
+                <p id="harga-roblox80" class="text-blue-400 font-bold text-sm">Menyambungkan...</p>
+            </div>
+
+            <div class="bg-gray-900 p-5 rounded-3xl border border-gray-800 hover:border-blue-500 transition">
+                <p class="text-[10px] text-gray-500 font-bold">MLBB</p>
+                <p class="font-black text-lg">86 Diamond</p>
+                <p id="harga-ml86" class="text-blue-400 font-bold text-sm">Menyambungkan...</p>
+            </div>
+
+        </div>
+    </div>
 </body>
 </html>
